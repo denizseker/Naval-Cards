@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject selecter;
     private Camera cam;
 
-    public bool isLeftClickOn = false;
+    public bool canUpgrade = false;
 
     // Start is called before the first frame update
     void Start()

@@ -10,11 +10,14 @@ public class DragObject : MonoBehaviour
     private GameManager gameManager;
 
     private bool checker;
+    private bool checker2;
+    private bool checker3;
 
     private void Start()
     {
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-        checker = false;
+        checker = true;
+        checker3 = false;
     }
 
     void OnMouseDown()
@@ -35,30 +38,69 @@ public class DragObject : MonoBehaviour
         return Camera.main.ScreenToWorldPoint(mousePoint);
     }
 
-    //Mouse selecterin üzerindeyse
-    void OnMouseOver()
+
+    //Selecter objesini hareket ettirir
+    void MoveSelecter()
     {
-        //Sol click basýlý ise
-        if (Input.GetMouseButton(0))
+        if (checker)
         {
-            gameManager.isLeftClickOn = true;
+            gameManager.canUpgrade = false;
             gameObject.SetActive(true);
             float distance_to_screen = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
             Vector3 pos_move = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance_to_screen));
             transform.position = new Vector3(pos_move.x, transform.position.y, pos_move.z);
         }
-        //Sol click basýlý deðilse/býrakýldýysa
-        else
+    }
+
+    //Selecter objesini destroy eder
+    void DestroySelecter()
+    {
+        if (checker3)
         {
-            if (!checker)
+            //obje mevcutsa
+            if (gameObject != null)
             {
-                gameManager.isLeftClickOn = false;
+                gameManager.canUpgrade = true;
+                checker = false;
                 gameObject.GetComponent<LineRenderer>().enabled = false;
-                Destroy(gameObject,0.1f);
-                checker = true;
+                Destroy(gameObject);
+                checker3 = false;
             }
         }
+        
+    }
 
+    private void Update()
+    {
+        //Sol click basýlý olmayýnca fonksiyonlarý durdurmasý için false deðer veriyoruz
+        if (!Input.GetMouseButton(0))
+        {
+            checker2 = false;
+            checker3 = true;
+        }
+        if (checker2)
+        {
+            MoveSelecter();
+        }
+        else
+        {
+            DestroySelecter();
+        }
+        
+    }
+
+    //Mouse objenin üstüne gelince
+    private void OnMouseEnter()
+    {
+        //Mouse objenin üstünde ve sol click basýlýyken
+        if (Input.GetMouseButton(0))
+        {
+            checker2 = true;
+        }
+        else
+        {
+            checker2 = false;
+        }
     }
 }
 
