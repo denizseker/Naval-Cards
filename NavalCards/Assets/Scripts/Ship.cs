@@ -9,38 +9,55 @@ public class Ship : MonoBehaviour
 
     public int health;
     [SerializeField] TextMeshProUGUI healthText;
+    [SerializeField] TextMeshProUGUI upgradeText;
+    [SerializeField] Animator upgradeTextAnim;
     [SerializeField] Material selectedMat;
     [SerializeField] Material normalMat;
-    private GameManager gameManager;
-    private GameObject selecter;
-    
+    private DragObject selecter;
 
-    bool isSelected;
+    private bool isSelected;
 
-
-    private void HealthUpgrade()
+    public void HealthUpgrade()
     {
         health += 50;
         healthText.text = health.ToString();
+        upgradeText.text = "Health Upgrade";
+        upgradeTextAnim.SetTrigger("DO");
+    }
+    public void WeaponUpgrade()
+    {
+        upgradeText.text = "Weapon Upgrade";
+        upgradeTextAnim.SetTrigger("DO");
+    }
+    private void WhichUpgradeSelected()
+    {
+        if(selecter.upgradeIndex == 0)
+        {
+            HealthUpgrade();
+        }
+        if(selecter.upgradeIndex == 1)
+        {
+            WeaponUpgrade();
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        selecter = GameObject.FindWithTag("Selecter").GetComponent<DragObject>();
         healthText.text = health.ToString();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         //Upgrade'in gerçekleþtiði yer
-        //Eðer obje seçilmiþ ise ancak selecter kullanýmý býrakýldýysa
-        if (isSelected && selecter == null)
+        //Eðer obje seçilmiþ ise ancak selecter default pozisyona dönmüþse(sürükleme býrakýlmýþ)
+        if (isSelected && selecter.transform.position.z == -33)
         {
             isSelected = false;
-            HealthUpgrade();
-            gameObject.GetComponent<MeshRenderer>().material = normalMat;
+            WhichUpgradeSelected();
         }
     }
 
@@ -49,7 +66,6 @@ public class Ship : MonoBehaviour
     {
         if(other.tag == "Selecter")
         {
-            selecter = other.gameObject;
             isSelected = true;
             gameObject.GetComponent<MeshRenderer>().material = selectedMat;
         }

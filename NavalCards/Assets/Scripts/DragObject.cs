@@ -6,18 +6,19 @@ public class DragObject : MonoBehaviour
 {
     private Vector3 mOffset;
     private float mZCoord;
+    private Camera cam;
 
-    private GameManager gameManager;
+    public bool canMove;
+    private bool isInvisible;
 
-    private bool checker;
-    private bool checker2;
-    private bool checker3;
+    public int upgradeIndex = 0;
 
     private void Start()
     {
-        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-        checker = true;
-        checker3 = false;
+        cam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        isInvisible = true;
+        canMove = false;
+        
     }
 
     void OnMouseDown()
@@ -42,51 +43,54 @@ public class DragObject : MonoBehaviour
     //Selecter objesini hareket ettirir
     void MoveSelecter()
     {
-        if (checker)
-        {
-            gameManager.canUpgrade = false;
-            gameObject.SetActive(true);
-            float distance_to_screen = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
-            Vector3 pos_move = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance_to_screen));
-            transform.position = new Vector3(pos_move.x, transform.position.y, pos_move.z);
-        }
+        gameObject.SetActive(true);
+        float distance_to_screen = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
+        Vector3 pos_move = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance_to_screen));
+        transform.position = new Vector3(pos_move.x, transform.position.y, pos_move.z);
     }
 
-    //Selecter objesini destroy eder
+    //Selecter objesini görünmez yapar
     void DestroySelecter()
     {
-        if (checker3)
+        if (!isInvisible)
         {
-            //obje mevcutsa
-            if (gameObject != null)
-            {
-                gameManager.canUpgrade = true;
-                checker = false;
-                gameObject.GetComponent<LineRenderer>().enabled = false;
-                Destroy(gameObject);
-                checker3 = false;
-            }
+            gameObject.GetComponent<LineRenderer>().enabled = false;
+            isInvisible = true;
+            //Objeyi uzak bir noktaya taþýyoruz.
+            gameObject.transform.position = new Vector3(0, 0, -33);
         }
         
     }
 
     private void Update()
     {
-        //Sol click basýlý olmayýnca fonksiyonlarý durdurmasý için false deðer veriyoruz
-        if (!Input.GetMouseButton(0))
+        if (canMove)
         {
-            checker2 = false;
-            checker3 = true;
-        }
-        if (checker2)
-        {
+            //Objeyi point noktasýna getiriyoruz
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                RaycastHit Rayhit;
+
+                if (Physics.Raycast(ray, out Rayhit))
+                {
+                    GameObject targethit = Rayhit.transform.gameObject;
+                    Vector3 hitPos = Rayhit.point;
+                    if (targethit != null)
+                    {
+                        hitPos = hitPos + new Vector3(0, 0.2f, 0);
+                        gameObject.transform.position = hitPos;
+                    }
+                }
+
+            }
+            //Objenin hareketi fonksiyonu
             MoveSelecter();
         }
         else
         {
             DestroySelecter();
         }
-        
     }
 
     //Mouse objenin üstüne gelince
@@ -95,11 +99,17 @@ public class DragObject : MonoBehaviour
         //Mouse objenin üstünde ve sol click basýlýyken
         if (Input.GetMouseButton(0))
         {
-            checker2 = true;
+            gameObject.GetComponent<LineRenderer>().enabled = true;
+            isInvisible = false;
         }
-        else
+    }
+
+    private void OnMouseOver()
+    {
+        //Mouse objenin üstünde ama sol click basýlý deðil/býrakýldý
+        if (!Input.GetMouseButton(0))
         {
-            checker2 = false;
+            canMove = false;
         }
     }
 }
