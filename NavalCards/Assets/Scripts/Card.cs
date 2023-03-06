@@ -14,15 +14,10 @@ public enum Upgrades
 
 public class Card : MonoBehaviour , IPointerDownHandler
 {
-    //[SerializeField] string CardUpgrade;
     [SerializeField] TextMeshProUGUI CardTextObj;
     public string Text;
     private DragObject selecterScr;
-
-
     [SerializeField] Upgrades upgrades = new Upgrades();
-    
-
     // Start is called before the first frame update
     void Start()
     {
@@ -30,11 +25,6 @@ public class Card : MonoBehaviour , IPointerDownHandler
         CardTextObj.text = Text;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void OnPointerDown(PointerEventData eventData)
     {
         selecterScr.upgradeIndex = ((int)upgrades);

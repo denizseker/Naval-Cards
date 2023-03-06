@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject selecter2;
 
     // Start is called before the first frame update
     void Start()

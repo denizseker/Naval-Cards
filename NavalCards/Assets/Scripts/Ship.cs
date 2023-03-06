@@ -19,6 +19,7 @@ public class Ship : MonoBehaviour
 
     public void HealthUpgrade()
     {
+        Debug.Log("Health Upgrade");
         health += 50;
         healthText.text = health.ToString();
         upgradeText.text = "Health Upgrade";
@@ -26,6 +27,7 @@ public class Ship : MonoBehaviour
     }
     public void WeaponUpgrade()
     {
+        Debug.Log("Weapon Upgrade");
         upgradeText.text = "Weapon Upgrade";
         upgradeTextAnim.SetTrigger("DO");
     }

@@ -18,9 +18,7 @@ public class DragObject : MonoBehaviour
         cam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         isInvisible = true;
         canMove = false;
-        
     }
-
     void OnMouseDown()
     {
         mZCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
