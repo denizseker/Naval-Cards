@@ -9,7 +9,7 @@ public enum Upgrades
 {
     Health,
     Weapon,
-    Shield
+    Duplicate
 };
 
 public class Card : MonoBehaviour , IPointerDownHandler

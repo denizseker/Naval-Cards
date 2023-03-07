@@ -6,7 +6,7 @@ using TMPro;
 
 public class Ship : MonoBehaviour
 {
-
+    [SerializeField] GameObject gameManager;
     public int health;
     [SerializeField] TextMeshProUGUI healthText;
     [SerializeField] TextMeshProUGUI upgradeText;
@@ -14,12 +14,21 @@ public class Ship : MonoBehaviour
     [SerializeField] Material selectedMat;
     [SerializeField] Material normalMat;
     private DragObject selecter;
-
     private bool isSelected;
 
+    public void DuplicateUpgrade()
+    {
+        upgradeText.text = "Duplicate Upgrade";
+        upgradeTextAnim.SetTrigger("DO");
+        GameObject obj1 = Instantiate(gameObject.transform.parent.gameObject, transform.position, Quaternion.identity);
+        GameObject obj2 = Instantiate(gameObject.transform.parent.gameObject, transform.position, Quaternion.identity);
+        obj1.GetComponentInChildren<MoveShip>().enabled = true;
+        obj2.GetComponentInChildren<MoveShip>().enabled = true;
+        obj1.GetComponentInChildren<MeshRenderer>().material = normalMat;
+        obj2.GetComponentInChildren<MeshRenderer>().material = normalMat;
+    }
     public void HealthUpgrade()
     {
-        Debug.Log("Health Upgrade");
         health += 50;
         healthText.text = health.ToString();
         upgradeText.text = "Health Upgrade";
@@ -27,7 +36,6 @@ public class Ship : MonoBehaviour
     }
     public void WeaponUpgrade()
     {
-        Debug.Log("Weapon Upgrade");
         upgradeText.text = "Weapon Upgrade";
         upgradeTextAnim.SetTrigger("DO");
     }
@@ -41,6 +49,10 @@ public class Ship : MonoBehaviour
         {
             WeaponUpgrade();
         }
+        if (selecter.upgradeIndex == 2)
+        {
+            DuplicateUpgrade();
+        }
     }
 
     // Start is called before the first frame update
@@ -48,7 +60,6 @@ public class Ship : MonoBehaviour
     {
         selecter = GameObject.FindWithTag("Selecter").GetComponent<DragObject>();
         healthText.text = health.ToString();
-
     }
 
     // Update is called once per frame
