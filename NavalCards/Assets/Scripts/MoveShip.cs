@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MoveShip : MonoBehaviour
 {
-    private Vector3 targetpos;
-    private bool Move = false;
+    public Vector3 targetpos;
+    public bool Move = false;
 
     public void MoveToPos()
     {
@@ -14,8 +15,9 @@ public class MoveShip : MonoBehaviour
     }
     private void Start()
     {
-        targetpos = transform.parent.position + new Vector3(Random.Range(-1, -2f), 0, Random.Range(-1f, 2f));
-        Move = true;
+        //targetpos = transform.parent.position + new Vector3(Random.Range(1, -1f), 0, Random.Range(1, 1f));
+        //Move = true;
+
     }
     // Update is called once per frame
     void Update()

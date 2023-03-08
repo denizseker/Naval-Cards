@@ -13,19 +13,38 @@ public class Ship : MonoBehaviour
     [SerializeField] Animator upgradeTextAnim;
     [SerializeField] Material selectedMat;
     [SerializeField] Material normalMat;
+    [SerializeField] List<GameObject> defaultTargetPos;
     private DragObject selecter;
     private bool isSelected;
+
+
+    private void Awake()
+    {
+        gameManager.GetComponent<GameManager>().ships.Add(gameObject.transform.parent.gameObject);
+    }
 
     public void DuplicateUpgrade()
     {
         upgradeText.text = "Duplicate Upgrade";
         upgradeTextAnim.SetTrigger("DO");
-        GameObject obj1 = Instantiate(gameObject.transform.parent.gameObject, transform.position, Quaternion.identity);
-        GameObject obj2 = Instantiate(gameObject.transform.parent.gameObject, transform.position, Quaternion.identity);
-        obj1.GetComponentInChildren<MoveShip>().enabled = true;
-        obj2.GetComponentInChildren<MoveShip>().enabled = true;
+        GameObject obj1 = Instantiate(gameObject.transform.parent.gameObject, transform.parent.position, Quaternion.identity);
+        GameObject obj2 = Instantiate(gameObject.transform.parent.gameObject, transform.parent.position, Quaternion.identity);
+        GameObject obj3 = Instantiate(gameObject.transform.parent.gameObject, transform.parent.position, Quaternion.identity);
+        //obj1.GetComponentInChildren<MoveShip>().enabled = true;
+        //obj2.GetComponentInChildren<MoveShip>().enabled = true;
+        //obj3.GetComponentInChildren<MoveShip>().enabled = true;
+        //obj1.GetComponentInChildren<MoveShip>().targetpos = defaultTargetPos[0].transform.position;
+        //obj2.GetComponentInChildren<MoveShip>().targetpos = defaultTargetPos[1].transform.position;
+        //obj3.GetComponentInChildren<MoveShip>().targetpos = defaultTargetPos[2].transform.position;
         obj1.GetComponentInChildren<MeshRenderer>().material = normalMat;
         obj2.GetComponentInChildren<MeshRenderer>().material = normalMat;
+        obj3.GetComponentInChildren<MeshRenderer>().material = normalMat;
+        //gameManager.GetComponent<GameManager>().ships.Add(gameObject);
+        //gameManager.GetComponent<GameManager>().ships.Add(obj1);
+        //gameManager.GetComponent<GameManager>().ships.Add(obj2);
+        //gameManager.GetComponent<GameManager>().ships.Add(obj3);
+        gameManager.GetComponent<GameManager>().SquareFormation();
+
     }
     public void HealthUpgrade()
     {
@@ -51,6 +70,7 @@ public class Ship : MonoBehaviour
         }
         if (selecter.upgradeIndex == 2)
         {
+            Debug.Log("Duplicate");
             DuplicateUpgrade();
         }
     }
@@ -58,6 +78,7 @@ public class Ship : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         selecter = GameObject.FindWithTag("Selecter").GetComponent<DragObject>();
         healthText.text = health.ToString();
     }
