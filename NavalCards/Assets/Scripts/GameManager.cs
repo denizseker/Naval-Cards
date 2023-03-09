@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         float currentZ = 0;
 
         // Set a targetposition variable of where to spawn objects.
-        Vector3 targetpostion = new Vector3(0,0.5f,0);
+        Vector3 targetpostion = new Vector3(0,0,-12);
 
         // Counter used for indexing when to start a new row.
         int counter = -1;
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
         int xoffset = -1;
 
         // Get the square root
-        float sqrt = Mathf.Sqrt(ships.Count);
+        float sqrt = Mathf.Sqrt(ships.Count) + 2;
 
         // Get the reference to the starting target positions x.
         float startx = targetpostion.x;
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Set the targetposition to a new Vector 3 with the new variables and offset applied.
-            targetpostion = new Vector3(targetpostion.x + (xoffset * 2.0f), 0, targetpostion.z);
+            targetpostion = new Vector3(targetpostion.x + (xoffset * 3f), 0, targetpostion.z);
 
             // If the counter is equal to the sqrt variable rounded down.
             if (counter == Mathf.Floor(sqrt))
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
                 // Set the targetposition y to 1 + 0.25f.
                 // The 1 is to increment in the y axis, giving another row.
                 // The 0.25f is to offset each sphere is the y axis so they do not overlap.
-                targetpostion.z += 1 + 1f;
+                targetpostion.z += 1 + 6f;
             }
 
             // Set the position of the instantiated object to the targetposition.
