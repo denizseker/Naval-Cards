@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        //ships.Add(GameObject.FindWithTag("AllyShip"));
     }
 
     public void SquareFormation()
@@ -21,7 +20,7 @@ public class GameManager : MonoBehaviour
         float currentZ = 0;
 
         // Set a targetposition variable of where to spawn objects.
-        Vector3 targetpostion = new Vector3(0,0,-12);
+        Vector3 targetpostion = new Vector3(0,5,-12);
 
         // Counter used for indexing when to start a new row.
         int counter = -1;
@@ -52,7 +51,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Set the targetposition to a new Vector 3 with the new variables and offset applied.
-            targetpostion = new Vector3(targetpostion.x + (xoffset * 3f), 0, targetpostion.z);
+            targetpostion = new Vector3(targetpostion.x + (xoffset * 3f), ships[i].transform.position.y, targetpostion.z);
 
             // If the counter is equal to the sqrt variable rounded down.
             if (counter == Mathf.Floor(sqrt))
@@ -67,7 +66,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Set the position of the instantiated object to the targetposition.
-            ships[i].GetComponentInChildren<MoveShip>().targetpos = targetpostion;
+            ships[i].GetComponent<MoveShip>().targetpos = targetpostion;
 
             currentX = targetpostion.x;
             currentZ = targetpostion.z;
@@ -81,13 +80,13 @@ public class GameManager : MonoBehaviour
                 biggerZ = currentZ;
             }
 
-            ships[i].GetComponentInChildren<MoveShip>().Move = true;
+            ships[i].GetComponent<MoveShip>().Move = true;
         }
 
         for (int i = 0; i < ships.Count; i++)
         {
-            ships[i].GetComponentInChildren<MoveShip>().targetpos -= new Vector3(biggerX / 2, 0, biggerZ / 2);
-            ships[i].GetComponentInChildren<MoveShip>().Move = true;
+            ships[i].GetComponent<MoveShip>().targetpos -= new Vector3(biggerX / 2, 0, biggerZ / 2);
+            ships[i].GetComponent<MoveShip>().Move = true;
         }
 
     }

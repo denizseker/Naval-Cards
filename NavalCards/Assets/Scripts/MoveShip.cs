@@ -10,14 +10,14 @@ public class MoveShip : MonoBehaviour
 
     public void MoveToPos()
     {
+        Debug.Log("Girdi");
         var step = 4 * Time.deltaTime;
-        transform.parent.position = Vector3.MoveTowards(transform.parent.position, targetpos, step);
+        transform.position = Vector3.MoveTowards(transform.position, targetpos, step);
     }
     private void Start()
     {
         //targetpos = transform.parent.position + new Vector3(Random.Range(1, -1f), 0, Random.Range(1, 1f));
         //Move = true;
-
     }
     // Update is called once per frame
     void Update()
