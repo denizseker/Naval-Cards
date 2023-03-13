@@ -4,12 +4,13 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using TMPro;
 
+//Eklenen kartýn upgrade özelliði inspector üzerinden dropdown listeden seçilmelidir.
 
 public enum Upgrades
 {
-    Health,
-    Weapon,
-    Duplicate
+    Health, //index 0
+    Weapon, //index 1
+    Duplicate //index 2
 };
 
 public class Card : MonoBehaviour , IPointerDownHandler

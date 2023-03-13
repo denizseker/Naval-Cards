@@ -15,12 +15,6 @@ public class SelectFunc : MonoBehaviour
         moveshipScript = GetComponentInParent<MoveShip>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Selecter")

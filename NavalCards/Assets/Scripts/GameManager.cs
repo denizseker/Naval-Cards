@@ -6,8 +6,8 @@ public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public List<GameObject> ships;
-
+    public List<GameObject> allyships;
+    public List<GameObject> enemyships;
     void Start()
     {
     }
@@ -15,9 +15,9 @@ public class GameManager : MonoBehaviour
     public void SquareFormation()
     {
         float biggerX = 0;
-        float currentX = 0;
+        float currentX;
         float biggerZ = 0;
-        float currentZ = 0;
+        float currentZ;
 
         // Set a targetposition variable of where to spawn objects.
         Vector3 targetpostion = new Vector3(0,5,-12);
@@ -28,13 +28,13 @@ public class GameManager : MonoBehaviour
         int xoffset = -1;
 
         // Get the square root
-        float sqrt = Mathf.Sqrt(ships.Count) + 2;
+        float sqrt = Mathf.Sqrt(allyships.Count) + 2;
 
         // Get the reference to the starting target positions x.
         float startx = targetpostion.x;
 
         // Loop through the number of objects to spawn for the square.
-        for (int i = 0; i < ships.Count; i++)
+        for (int i = 0; i < allyships.Count; i++)
         {
             //ships[i].GetComponentInChildren<MoveShip>().ResetPos();
             // Increment the counter by 1.
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Set the targetposition to a new Vector 3 with the new variables and offset applied.
-            targetpostion = new Vector3(targetpostion.x + (xoffset * 3f), ships[i].transform.position.y, targetpostion.z);
+            targetpostion = new Vector3(targetpostion.x + (xoffset * 3f), allyships[i].transform.position.y, targetpostion.z);
 
             // If the counter is equal to the sqrt variable rounded down.
             if (counter == Mathf.Floor(sqrt))
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Set the position of the instantiated object to the targetposition.
-            ships[i].GetComponent<MoveShip>().targetpos = targetpostion;
+            allyships[i].GetComponent<MoveShip>().targetpos = targetpostion;
 
             currentX = targetpostion.x;
             currentZ = targetpostion.z;
@@ -80,14 +80,39 @@ public class GameManager : MonoBehaviour
                 biggerZ = currentZ;
             }
 
-            ships[i].GetComponent<MoveShip>().Move = true;
+            allyships[i].GetComponent<MoveShip>().Move = true;
         }
 
-        for (int i = 0; i < ships.Count; i++)
+        for (int i = 0; i < allyships.Count; i++)
         {
-            ships[i].GetComponent<MoveShip>().targetpos -= new Vector3(biggerX / 2, 0, biggerZ / 2);
-            ships[i].GetComponent<MoveShip>().Move = true;
+            allyships[i].GetComponent<MoveShip>().targetpos -= new Vector3(biggerX / 2, 0, biggerZ / 2);
+            allyships[i].GetComponent<MoveShip>().Move = true;
         }
 
     }
+
+    public void Update()
+    {
+
+
+
+        // Targetlarýn atanmasý durumu yazýlacak
+        if (Input.GetKeyDown("space"))
+        {
+
+            //for (int i = 0; i < enemyships.Count; i++)
+            //{
+
+            //    allyships[i].GetComponent<Ship>().TargetShip = enemyships[i];
+
+            //    if (i == enemyships.Count)
+            //    {
+            //        i = 0;
+            //    }
+
+            //}
+        }
+    }
+
+
 }

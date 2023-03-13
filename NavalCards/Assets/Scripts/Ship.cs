@@ -13,6 +13,11 @@ public class Ship : MonoBehaviour
     [SerializeField] Animator upgradeTextAnim;
     [SerializeField] Material selectedMat;
     [SerializeField] Material normalMat;
+
+
+    public GameObject TargetShip;
+
+
     private DragObject selecter;
     public bool isSelected;
 
@@ -20,29 +25,24 @@ public class Ship : MonoBehaviour
     private void Awake()
     {
         gameManager = GameObject.FindWithTag("GameManager");
-        gameManager.GetComponent<GameManager>().ships.Add(gameObject);
+
+        if(gameObject.tag == "AllyShip")
+        {
+            gameManager.GetComponent<GameManager>().allyships.Add(gameObject);
+        }
+        if (gameObject.tag == "EnemyShip")
+        {
+            gameManager.GetComponent<GameManager>().enemyships.Add(gameObject);
+        }
     }
 
     public void DuplicateUpgrade()
     {
         upgradeText.text = "Duplicate Upgrade";
         upgradeTextAnim.SetTrigger("DO");
-        GameObject obj1 = Instantiate(gameObject, transform.position, Quaternion.identity);
-        GameObject obj2 = Instantiate(gameObject, transform.position, Quaternion.identity);
-        GameObject obj3 = Instantiate(gameObject, transform.position, Quaternion.identity);
-        //obj1.GetComponentInChildren<MoveShip>().enabled = true;
-        //obj2.GetComponentInChildren<MoveShip>().enabled = true;
-        //obj3.GetComponentInChildren<MoveShip>().enabled = true;
-        //obj1.GetComponentInChildren<MoveShip>().targetpos = defaultTargetPos[0].transform.position;
-        //obj2.GetComponentInChildren<MoveShip>().targetpos = defaultTargetPos[1].transform.position;
-        //obj3.GetComponentInChildren<MoveShip>().targetpos = defaultTargetPos[2].transform.position;
-        //obj1.GetComponent<MeshRenderer>().material = normalMat;
-        //obj2.GetComponent<MeshRenderer>().material = normalMat;
-        //obj3.GetComponent<MeshRenderer>().material = normalMat;
-        //gameManager.GetComponent<GameManager>().ships.Add(gameObject);
-        //gameManager.GetComponent<GameManager>().ships.Add(obj1);
-        //gameManager.GetComponent<GameManager>().ships.Add(obj2);
-        //gameManager.GetComponent<GameManager>().ships.Add(obj3);
+        Instantiate(gameObject, transform.position, Quaternion.identity);
+        Instantiate(gameObject, transform.position, Quaternion.identity);
+        Instantiate(gameObject, transform.position, Quaternion.identity);
         gameManager.GetComponent<GameManager>().SquareFormation();
 
     }
@@ -60,19 +60,24 @@ public class Ship : MonoBehaviour
     }
     private void WhichUpgradeSelected()
     {
-        if(selecter.upgradeIndex == 0)
+        //Sadece dost unitlere yapýlabilir upgradeler.
+        if(gameObject.tag == "AllyShip")
         {
-            HealthUpgrade();
+            if (selecter.upgradeIndex == 0)
+            {
+                HealthUpgrade();
+            }
+            if (selecter.upgradeIndex == 1)
+            {
+                WeaponUpgrade();
+            }
+            if (selecter.upgradeIndex == 2)
+            {
+                Debug.Log("Duplicate");
+                DuplicateUpgrade();
+            }
         }
-        if(selecter.upgradeIndex == 1)
-        {
-            WeaponUpgrade();
-        }
-        if (selecter.upgradeIndex == 2)
-        {
-            Debug.Log("Duplicate");
-            DuplicateUpgrade();
-        }
+        
     }
 
     // Start is called before the first frame update
@@ -94,6 +99,4 @@ public class Ship : MonoBehaviour
             WhichUpgradeSelected();
         }
     }
-
-    
 }
