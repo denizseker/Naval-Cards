@@ -4,31 +4,55 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private GameObject enemyShip;
-    private Collider col;
-
-    // Start is called before the first frame update
-    void Start()
+    private GameObject Target;
+    private BoxCollider targetBox;
+    private Vector3 hitPos;
+    public int damage = 10;
+    private Rigidbody rb;
+    private void Start()
     {
-        enemyShip = GameObject.Find("EnemyShip");
-        col = GetComponent<BoxCollider>();
-
+        Target = GetComponentInParent<Ship>().TargetShip;
+        targetBox = Target.GetComponentInChildren<BoxCollider>();
+        hitPos = GetRandomPointInsideCollider(targetBox);
+        rb = GetComponent<Rigidbody>();
+        rb.velocity = CalcBallisticVelocityVector(transform.position, hitPos, 30);
     }
 
+    //Geminin collideri üzerinde rastgele hit noktasý fonksiyonu
+    public Vector3 GetRandomPointInsideCollider(BoxCollider boxCollider)
+    {
+        Vector3 extents = boxCollider.size / 2f;
+        Vector3 point = new Vector3(
+            Random.Range(-extents.x, extents.x),
+            Random.Range(-extents.y, extents.y),
+            Random.Range(-extents.z, extents.z)
+        );
+
+        return boxCollider.transform.TransformPoint(point);
+    }
+
+    Vector3 CalcBallisticVelocityVector(Vector3 source, Vector3 target, float angle)
+    {
+        Vector3 direction = target - source;
+        float h = direction.y;
+        direction.y = 0;
+        float distance = direction.magnitude;
+        float a = angle * Mathf.Deg2Rad;
+        direction.y = distance * Mathf.Tan(a);
+        distance += h / Mathf.Tan(a);
+
+        // calculate velocity
+        float velocity = Mathf.Sqrt(distance * Physics.gravity.magnitude / Mathf.Sin(2 * a));
+        return velocity * direction.normalized;
+    }
+
+    //Mermi gemiye isabet ederse
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "EnemyShip")
+        if(other.tag == "EnemyShip" || other.tag == "AllyShip")
         {
-            Destroy(gameObject);
-            other.GetComponent<Ship>().health -= 10;
+            other.GetComponentInParent<Ship>().ReduceHealth(damage);
         }
     }
 
-
-
-    // Update is called once per frame
-    private void FixedUpdate()
-    {
-        transform.position = Vector3.MoveTowards(transform.position,enemyShip.transform.position, 15 * Time.deltaTime);
-    }
 }

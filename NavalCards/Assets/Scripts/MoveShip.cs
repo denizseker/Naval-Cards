@@ -10,7 +10,6 @@ public class MoveShip : MonoBehaviour
 
     public void MoveToPos()
     {
-        Debug.Log("Girdi");
         var step = 4 * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, targetpos, step);
     }

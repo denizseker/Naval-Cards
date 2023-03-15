@@ -55,7 +55,7 @@ public class DragObject : MonoBehaviour
             gameObject.GetComponent<LineRenderer>().enabled = false;
             isInvisible = true;
             //Objeyi uzak bir noktaya taþýyoruz.
-            gameObject.transform.position = new Vector3(0, 0, -33);
+            gameObject.transform.position = new Vector3(0, 0.1f, -33);
         }
         
     }

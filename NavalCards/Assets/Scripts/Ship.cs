@@ -8,19 +8,16 @@ public class Ship : MonoBehaviour
 {
     private GameObject gameManager;
     public int health;
+
     [SerializeField] TextMeshProUGUI healthText;
     [SerializeField] TextMeshProUGUI upgradeText;
     [SerializeField] Animator upgradeTextAnim;
     [SerializeField] Material selectedMat;
     [SerializeField] Material normalMat;
 
-
     public GameObject TargetShip;
-
-
     private DragObject selecter;
     public bool isSelected;
-
 
     private void Awake()
     {
@@ -48,8 +45,7 @@ public class Ship : MonoBehaviour
     }
     public void HealthUpgrade()
     {
-        health += 50;
-        healthText.text = health.ToString();
+        IncreaseHealth(50);
         upgradeText.text = "Health Upgrade";
         upgradeTextAnim.SetTrigger("DO");
     }
@@ -57,6 +53,17 @@ public class Ship : MonoBehaviour
     {
         upgradeText.text = "Weapon Upgrade";
         upgradeTextAnim.SetTrigger("DO");
+    }
+
+    public void IncreaseHealth(int _amount)
+    {
+        health += _amount;
+        healthText.text = health.ToString();
+    }
+    public void ReduceHealth(int _amount)
+    {
+        health -= _amount;
+        healthText.text = health.ToString();
     }
     private void WhichUpgradeSelected()
     {
@@ -77,18 +84,14 @@ public class Ship : MonoBehaviour
                 DuplicateUpgrade();
             }
         }
-        
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        
         selecter = GameObject.FindWithTag("Selecter").GetComponent<DragObject>();
         healthText.text = health.ToString();
     }
 
-    // Update is called once per frame
     void Update()
     {
         //Upgrade'in gerçekleþtiði yer

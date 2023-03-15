@@ -8,9 +8,8 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> allyships;
     public List<GameObject> enemyships;
-    void Start()
-    {
-    }
+
+    public bool isGameStarted;
 
     public void SquareFormation()
     {
@@ -91,28 +90,38 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void Update()
+    public void CalculateTarget()
     {
-
-
-
-        // Targetlarýn atanmasý durumu yazýlacak
-        if (Input.GetKeyDown("space"))
+        //4 Ally 3 enemy
+        if (allyships.Count > enemyships.Count)
         {
-
-            //for (int i = 0; i < enemyships.Count; i++)
-            //{
-
-            //    allyships[i].GetComponent<Ship>().TargetShip = enemyships[i];
-
-            //    if (i == enemyships.Count)
-            //    {
-            //        i = 0;
-            //    }
-
-            //}
+            var j = 0;
+            for (int i = 0; i < allyships.Count; i++)
+            {
+                if (j == enemyships.Count)
+                {
+                    j = 0;
+                }
+                allyships[i].GetComponent<Ship>().TargetShip = enemyships[j];
+                j++;
+            }
+        }
+        //3 ally 3 enemy || 2 ally 3 enemy
+        if (allyships.Count <= enemyships.Count)
+        {
+            for (int i = 0; i < allyships.Count; i++)
+            {
+                allyships[i].GetComponent<Ship>().TargetShip = enemyships[i];
+            }
         }
     }
-
-
+    public void Update()
+    {
+        //Savaþ aþamasý.
+        if (Input.GetKeyDown("space"))
+        {
+            CalculateTarget();
+            isGameStarted = true;
+        }
+    }
 }

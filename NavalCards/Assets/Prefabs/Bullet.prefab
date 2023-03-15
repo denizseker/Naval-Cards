@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 4487029171964768702}
   - component: {fileID: 4487029171964768701}
   - component: {fileID: 4487029171964768700}
-  - component: {fileID: 4487029171964768703}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,19 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4487029171964768703
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4487029171964768673}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4487029172769195076
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,10 +93,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4487029172769195075}
   - component: {fileID: 4487029172769195074}
-  - component: {fileID: 4487029172769195077}
+  - component: {fileID: 6333486624949579526}
+  - component: {fileID: 930032648583996955}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,7 +134,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4487029172769195077
+--- !u!114 &6333486624949579526
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,7 +143,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 4487029172769195076}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 953a86845fd8aaa408957c971e00d987, type: 3}
+  m_Script: {fileID: 11500000, guid: 1024708e825f0334593d0976793f7d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
+  damage: 10
+--- !u!135 &930032648583996955
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4487029172769195076}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0, z: 0}
