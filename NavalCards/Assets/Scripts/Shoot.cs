@@ -20,7 +20,7 @@ public class Shoot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uniqueTimer = Random.Range(0f, 1.5f);
+        uniqueTimer = Random.Range(1f, 3f);
         gameManager = GameObject.FindWithTag("GameManager");
         lookAtscr = GetComponent<LookAtObject>();
     }
