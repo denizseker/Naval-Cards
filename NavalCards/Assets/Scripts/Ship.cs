@@ -6,7 +6,7 @@ using TMPro;
 
 public class Ship : MonoBehaviour
 {
-    private GameObject gameManager;
+    private GameManager gameManager;
     public int health;
 
     [SerializeField] TextMeshProUGUI healthText;
@@ -17,19 +17,20 @@ public class Ship : MonoBehaviour
 
     public GameObject TargetShip;
     private DragObject selecter;
+    private LookAtObject lookScript;
     public bool isSelected;
 
     private void Awake()
     {
-        gameManager = GameObject.FindWithTag("GameManager");
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
 
-        if(gameObject.tag == "AllyShip")
+        if (gameObject.tag == "AllyShip")
         {
-            gameManager.GetComponent<GameManager>().allyships.Add(gameObject);
+            gameManager.allyships.Add(gameObject);
         }
         if (gameObject.tag == "EnemyShip")
         {
-            gameManager.GetComponent<GameManager>().enemyships.Add(gameObject);
+            gameManager.enemyships.Add(gameObject);
         }
     }
 
@@ -40,7 +41,7 @@ public class Ship : MonoBehaviour
         Instantiate(gameObject, transform.position, Quaternion.identity);
         Instantiate(gameObject, transform.position, Quaternion.identity);
         Instantiate(gameObject, transform.position, Quaternion.identity);
-        gameManager.GetComponent<GameManager>().SquareFormation();
+        gameManager.SquareFormation();
 
     }
     public void HealthUpgrade()
@@ -65,6 +66,20 @@ public class Ship : MonoBehaviour
         health -= _amount;
         healthText.text = health.ToString();
     }
+
+    public void DestroyShip()
+    {
+        if(gameObject.tag == "AllyShip")
+        {
+            gameManager.allyships.Remove(gameObject);
+            Destroy(gameObject);
+        }
+        if (gameObject.tag == "EnemyShip")
+        {
+            gameManager.enemyships.Remove(gameObject);
+            Destroy(gameObject);
+        }
+    }
     private void WhichUpgradeSelected()
     {
         //Sadece dost unitlere yapýlabilir upgradeler.
@@ -86,14 +101,38 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public void SetTarget()
+    {
+        if(gameObject.tag == "AllyShip")
+        {
+            var randomNumber = Random.Range(0,gameManager.enemyships.Count);
+            TargetShip = gameManager.GetComponent<GameManager>().enemyships[randomNumber];
+        }
+        if (gameObject.tag == "EnemyShip")
+        {
+            var randomNumber = Random.Range(0, gameManager.allyships.Count);
+            TargetShip = gameManager.GetComponent<GameManager>().allyships[randomNumber];
+        }
+    }
+
+
     void Start()
     {
         selecter = GameObject.FindWithTag("Selecter").GetComponent<DragObject>();
         healthText.text = health.ToString();
+        lookScript = GetComponentInChildren<LookAtObject>();
     }
 
     void Update()
-    {
+    { 
+        //Target seçili deðilse - oyun baþladýysa - 
+        if(TargetShip == null && gameManager.isGameStarted)
+        {
+            SetTarget();
+            lookScript.StartRotating();
+        }
+
+
         //Upgrade'in gerçekleþtiði yer
         //Eðer obje seçilmiþ ise ancak selecter default pozisyona dönmüþse(sürükleme býrakýlmýþ)
         if (isSelected && selecter.transform.position.z == -33)
@@ -102,4 +141,22 @@ public class Ship : MonoBehaviour
             WhichUpgradeSelected();
         }
     }
+
+    //Main scriptin bulunduðu objede collider olmadýðý için fonksiyon üzerinden trigger kontrol ediyorum.
+    public void ManuelTriggerEnter(Collider _other)
+    {
+        if (_other.tag == "EnemyBullet" && gameObject.tag == "AllyShip" || _other.tag == "AllyBullet" && gameObject.tag == "EnemyShip")
+        {
+            //Geminin canýný azaltýyoruz.
+            ReduceHealth(_other.GetComponent<Bullet>().damage);
+
+            //Geminin caný 0 veya küçük ise *Patlama Durumu
+            if (health <= 0)
+            {
+                DestroyShip();
+            }
+            Destroy(_other.gameObject);
+        }
+    }
+
 }

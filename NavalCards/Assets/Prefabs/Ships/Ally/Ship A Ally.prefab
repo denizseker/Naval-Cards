@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04209aceaee7b949a59eed28b60cc35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLooking: 0
 --- !u!114 &1484661045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,7 +414,7 @@ GameObject:
   - component: {fileID: 3336401271381430473}
   m_Layer: 2
   m_Name: Ship A Ally
-  m_TagString: Untagged
+  m_TagString: AllyShip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1099,6 +1100,7 @@ MonoBehaviour:
   selectedMat: {fileID: 2100000, guid: 12f9a151bbc44a8439aa0d92ad074c50, type: 2}
   normalMat: {fileID: -9072509146148293820, guid: ae3cf08d8bf6c0942a21c4a008f98b73,
     type: 3}
+  TargetShip: {fileID: 0}
   isSelected: 0
 --- !u!114 &5881887679382389221
 MonoBehaviour:

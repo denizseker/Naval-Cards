@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class LookAtObject : MonoBehaviour
 {
-    private GameObject target;
+    private Ship thisShip;
     private float speed = 0.05f;
-    private GameManager gameManager;
     private Coroutine LookCoroutine;
     //Silahýn dönmeyi tamamalayýp tamamlamadýðý
     public bool isLooking = false;
     //Update fonksiyonun 1 kere çalýþmasý için
     private bool oneTime = false;
    
-    private void StartRotating()
+    public void StartRotating()
     {
         if (LookCoroutine != null)
         {
@@ -24,7 +23,7 @@ public class LookAtObject : MonoBehaviour
 
     private IEnumerator LookAt()
     {
-        Quaternion lookRotation = Quaternion.LookRotation(target.transform.position - transform.position);
+        Quaternion lookRotation = Quaternion.LookRotation(thisShip.TargetShip.transform.position - transform.position);
 
         float time = 0;
 
@@ -45,18 +44,17 @@ public class LookAtObject : MonoBehaviour
 
     private void Start()
     {
-        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        thisShip = GetComponentInParent<Ship>();
     }
 
     // Update is called once per frame
     void Update()
     {
         //Silahlar hedefe döndürülüyor. Oyun baþlamýþsa ve henüz hedefe bakmýyorsa.
-        if (gameManager.isGameStarted && !oneTime && !isLooking)
+        if (!oneTime && !isLooking)
         {
-            target = GetComponentInParent<Ship>().TargetShip;
-            StartRotating();
-            oneTime = true;
+            //StartRotating();
+            //oneTime = true;
         }
     }
 }

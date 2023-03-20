@@ -9,6 +9,7 @@ public class Shoot : MonoBehaviour
 
     private GameObject gameManager;
     private LookAtObject lookAtscr;
+    private Ship thisShip;
 
     private float uniqueTimer;
 
@@ -20,6 +21,7 @@ public class Shoot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        thisShip = GetComponentInParent<Ship>();
         uniqueTimer = Random.Range(1f, 3f);
         gameManager = GameObject.FindWithTag("GameManager");
         lookAtscr = GetComponent<LookAtObject>();
@@ -29,7 +31,7 @@ public class Shoot : MonoBehaviour
     void Update()
     {
         //Oyun baþladýysa silahlarýmýz ateþ etmeye baþlýyor.
-        if (gameManager.GetComponent<GameManager>().isGameStarted && lookAtscr.isLooking)
+        if (gameManager.GetComponent<GameManager>().isGameStarted && lookAtscr.isLooking && thisShip.TargetShip != null)
         {
             timer += Time.deltaTime;
 
@@ -46,11 +48,8 @@ public class Shoot : MonoBehaviour
                     timer = 0;
                     var ins = Instantiate(bullet, shotPos.transform.position, Quaternion.identity);
                     ins.transform.parent = gameObject.transform;
-
                 }
             }
-            
         }
-        
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+
+    private GameManager gameManager;
     private GameObject Target;
     private BoxCollider targetBox;
     private Vector3 hitPos;
@@ -11,12 +13,23 @@ public class Bullet : MonoBehaviour
     private Rigidbody rb;
     private void Start()
     {
+        if (gameObject.transform.parent.transform.parent.transform.parent.tag == "AllyShip")
+        {
+            gameObject.tag = "AllyBullet";
+        }
+        if (gameObject.transform.parent.transform.parent.transform.parent.tag == "EnemyShip")
+        {
+            gameObject.tag = "EnemyBullet";
+        }
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         Target = GetComponentInParent<Ship>().TargetShip;
         targetBox = Target.GetComponentInChildren<BoxCollider>();
         hitPos = GetRandomPointInsideCollider(targetBox);
         rb = GetComponent<Rigidbody>();
         rb.velocity = CalcBallisticVelocityVector(transform.position, hitPos, 30);
+        gameObject.transform.parent = null;
     }
+
 
     //Geminin collideri üzerinde rastgele hit noktasý fonksiyonu
     public Vector3 GetRandomPointInsideCollider(BoxCollider boxCollider)
@@ -49,10 +62,10 @@ public class Bullet : MonoBehaviour
     //Mermi gemiye isabet ederse
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "EnemyShip" || other.tag == "AllyShip")
+        if (other.tag == "EnemyShip" && gameObject.tag == "AllyBullet" || other.tag == "AllyShip" && gameObject.tag == "EnemyBullet" || other.tag == "Ground")
         {
-            other.GetComponentInParent<Ship>().ReduceHealth(damage);
+            //Çarpýþmada mermiyi yok ediyoruz.
+            Destroy(gameObject);
         }
     }
-
 }

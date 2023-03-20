@@ -9,6 +9,9 @@ TagManager:
   - EnemyShip
   - Selecter
   - GameManager
+  - AllyBullet
+  - EnemyBullet
+  - Ground
   layers:
   - Default
   - TransparentFX

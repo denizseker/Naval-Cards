@@ -90,38 +90,44 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void CalculateTarget()
-    {
-        //4 Ally 3 enemy
-        if (allyships.Count > enemyships.Count)
-        {
-            var j = 0;
-            for (int i = 0; i < allyships.Count; i++)
-            {
-                if (j == enemyships.Count)
-                {
-                    j = 0;
-                }
-                allyships[i].GetComponent<Ship>().TargetShip = enemyships[j];
-                j++;
-            }
-        }
-        //3 ally 3 enemy || 2 ally 3 enemy
-        if (allyships.Count <= enemyships.Count)
-        {
-            for (int i = 0; i < allyships.Count; i++)
-            {
-                allyships[i].GetComponent<Ship>().TargetShip = enemyships[i];
-            }
-        }
-    }
+    //public void CalculateTarget()
+    //{
+    //    //4 Ally 3 enemy
+    //    if (allyships.Count > enemyships.Count)
+    //    {
+    //        var j = 0;
+    //        for (int i = 0; i < allyships.Count; i++)
+    //        {
+    //            if (j == enemyships.Count)
+    //            {
+    //                j = 0;
+    //            }
+    //            allyships[i].GetComponent<Ship>().TargetShip = enemyships[j];
+    //            j++;
+    //        }
+    //    }
+    //    //3 ally 3 enemy || 2 ally 3 enemy
+    //    if (allyships.Count <= enemyships.Count)
+    //    {
+    //        for (int i = 0; i < allyships.Count; i++)
+    //        {
+    //            allyships[i].GetComponent<Ship>().TargetShip = enemyships[i];
+    //        }
+    //    }
+    //}
     public void Update()
     {
-        //Savaþ aþamasý.
+        //Round baþlat
         if (Input.GetKeyDown("space"))
         {
-            CalculateTarget();
             isGameStarted = true;
+            Debug.Log("Round baþladý");
+        }
+        //Round bitir
+        if((enemyships.Count == 0 || allyships.Count == 0) && isGameStarted )
+        {
+            isGameStarted = false;
+            Debug.Log("Round bitti");
         }
     }
 }
