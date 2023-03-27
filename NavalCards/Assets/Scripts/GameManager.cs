@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> allyships;
     public List<GameObject> enemyships;
+    public List<GameObject> cells;
 
     public bool isGameStarted;
 
@@ -115,8 +116,16 @@ public class GameManager : MonoBehaviour
     //        }
     //    }
     //}
+
+    private void Start()
+    {
+
+    }
+
+
     public void Update()
     {
+
         //Round baþlat
         if (Input.GetKeyDown("space"))
         {

@@ -27,15 +27,6 @@ public class DragShip : MonoBehaviour
             {
                 transform.position = ray.GetPoint(distance); // distance along the ray
             }
-
-            //if (Input.GetKey("e"))
-            //{
-            //    transform.RotateAround(transform.position, transform.up, Time.deltaTime * 90f);
-            //}
-            //if (Input.GetKey("q"))
-            //{
-            //    transform.RotateAround(transform.position, transform.up, Time.deltaTime * -90f);
-            //}
         }
     }
 
