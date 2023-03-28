@@ -91,45 +91,28 @@ public class GameManager : MonoBehaviour
 
     }
 
-    //public void CalculateTarget()
-    //{
-    //    //4 Ally 3 enemy
-    //    if (allyships.Count > enemyships.Count)
-    //    {
-    //        var j = 0;
-    //        for (int i = 0; i < allyships.Count; i++)
-    //        {
-    //            if (j == enemyships.Count)
-    //            {
-    //                j = 0;
-    //            }
-    //            allyships[i].GetComponent<Ship>().TargetShip = enemyships[j];
-    //            j++;
-    //        }
-    //    }
-    //    //3 ally 3 enemy || 2 ally 3 enemy
-    //    if (allyships.Count <= enemyships.Count)
-    //    {
-    //        for (int i = 0; i < allyships.Count; i++)
-    //        {
-    //            allyships[i].GetComponent<Ship>().TargetShip = enemyships[i];
-    //        }
-    //    }
-    //}
+
 
     private void Start()
     {
-
+        for (int i = 0; i < allyships.Count; i++)
+        {
+            cells[i].GetComponent<Cell>().GetShip(allyships[i]);
+            allyships[i].GetComponent<Ship>().currentCell = cells[i];
+        }
     }
 
 
     public void Update()
     {
-
         //Round baþlat
         if (Input.GetKeyDown("space"))
         {
             isGameStarted = true;
+            for (int i = 0; i < cells.Count; i++)
+            {
+                cells[i].GetComponent<MeshRenderer>().enabled = false;
+            }
             Debug.Log("Round baþladý");
         }
         //Round bitir

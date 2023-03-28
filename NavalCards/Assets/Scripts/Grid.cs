@@ -14,10 +14,9 @@ public class Grid : MonoBehaviour
     private int offset_z = 0;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         CreateGrid();
-
     }
 
 
@@ -29,11 +28,10 @@ public class Grid : MonoBehaviour
             
             for (int j = 0; j < height; j++)
             {
-                Vector3 worldPosition = new Vector3(i+offset_x, 0, j+offset_z);
+                Vector3 worldPosition = new Vector3(i+offset_x-12, -0.55f, j+offset_z-3);
                 Transform obj = Instantiate(gridCellPrefab, worldPosition, Quaternion.identity);
                 obj.parent = gameObject.transform;
                 obj.name = "Cell" + name;
-                //nodes[i, j] = new Node(true, worldPosition, obj);
                 name++;
                 offset_z += 7;
             }

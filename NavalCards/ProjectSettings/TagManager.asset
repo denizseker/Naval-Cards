@@ -12,6 +12,7 @@ TagManager:
   - AllyBullet
   - EnemyBullet
   - Ground
+  - Cell
   layers:
   - Default
   - TransparentFX

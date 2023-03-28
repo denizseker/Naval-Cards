@@ -7,6 +7,8 @@ using TMPro;
 public class Ship : MonoBehaviour
 {
     private GameManager gameManager;
+    public GameObject currentCell;
+    public GameObject oldCell;
     public int health;
 
     [SerializeField] TextMeshProUGUI healthText;
@@ -22,8 +24,8 @@ public class Ship : MonoBehaviour
 
     private void Awake()
     {
+        currentCell = null;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-
         if (gameObject.tag == "AllyShip")
         {
             gameManager.allyships.Add(gameObject);
@@ -34,14 +36,14 @@ public class Ship : MonoBehaviour
         }
     }
 
+    
+
     public void DuplicateUpgrade()
     {
         upgradeText.text = "Duplicate Upgrade";
         upgradeTextAnim.SetTrigger("DO");
         Instantiate(gameObject, transform.position, Quaternion.identity);
-        Instantiate(gameObject, transform.position, Quaternion.identity);
-        Instantiate(gameObject, transform.position, Quaternion.identity);
-        gameManager.SquareFormation();
+        //gameManager.SquareFormation();
 
     }
     public void HealthUpgrade()
@@ -115,9 +117,40 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public void GetCell (GameObject _ship)
+    {
+        Debug.Log("Getcell içi1");
+        for (int i = 0; i < gameManager.cells.Count; i++)
+        {
+            if (gameManager.cells[i].GetComponent<Cell>().isEmpty)
+            {
+                gameManager.cells[i].GetComponent<Cell>().GetShip(_ship);
+                currentCell = gameManager.cells[i];
+                Debug.Log("Getcell içi");
+                return;
+            }
+        }
+
+    }
+    IEnumerator LateStart(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        if (currentCell == null && gameObject.tag == "AllyShip")
+        {
+            GetCell(gameObject);
+        }
+        
+    }
+
 
     void Start()
     {
+
+        if(gameObject.tag == "AllyShip")
+        {
+            StartCoroutine(LateStart(0.1f));
+        }
+        
         selecter = GameObject.FindWithTag("Selecter").GetComponent<DragObject>();
         healthText.text = health.ToString();
         lookScript = GetComponentInChildren<LookAtObject>();
@@ -158,5 +191,4 @@ public class Ship : MonoBehaviour
             Destroy(_other.gameObject);
         }
     }
-
 }
