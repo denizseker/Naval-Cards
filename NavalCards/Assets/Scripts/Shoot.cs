@@ -6,6 +6,8 @@ public class Shoot : MonoBehaviour
 {
     [SerializeField] GameObject shotPos;
     [SerializeField] GameObject bullet;
+    //Sýlahýn ateþ etme hýzý (x saniyede 1)
+    [SerializeField] private float fireRate = 2;
 
     private GameObject gameManager;
     private LookAtObject lookAtscr;
@@ -15,8 +17,7 @@ public class Shoot : MonoBehaviour
 
     private bool startShoot;
     private float timer;
-    //Sýlahýn ateþ etme hýzý (x saniyede 1)
-    private int fireRate = 2;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +47,7 @@ public class Shoot : MonoBehaviour
                 if (timer > fireRate)
                 {
                     timer = 0;
-                    var ins = Instantiate(bullet, shotPos.transform.position, Quaternion.identity);
+                    var ins = Instantiate(bullet, shotPos.transform.position, shotPos.transform.rotation);
                     ins.transform.parent = gameObject.transform;
                 }
             }

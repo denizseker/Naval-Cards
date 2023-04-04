@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Rocket : MonoBehaviour
 {
     private GameObject Target;
     private BoxCollider targetBox;
     private Vector3 hitPos;
     public int damage = 10;
-    private Rigidbody rb;
     private void Start()
     {
         if (gameObject.transform.parent.transform.parent.transform.parent.tag == "AllyShip")
@@ -22,11 +21,17 @@ public class Bullet : MonoBehaviour
         Target = GetComponentInParent<Ship>().TargetShip;
         targetBox = Target.GetComponentInChildren<BoxCollider>();
         hitPos = GetRandomPointInsideCollider(targetBox);
-        rb = GetComponent<Rigidbody>();
-        rb.velocity = CalcBallisticVelocityVector(transform.position, hitPos, 30);
         gameObject.transform.parent = null;
+        MoveToPos();
     }
 
+    public void MoveToPos()
+    {
+        Vector3 forward = transform.forward;
+        GetComponent<Rigidbody>().AddForce(forward * 15, ForceMode.Impulse);
+        //var step = 4 * Time.deltaTime;
+        //transform.position = Vector3.MoveTowards(transform.position, hitPos, step);
+    }
 
     //Geminin collideri üzerinde rastgele hit noktasý fonksiyonu
     public Vector3 GetRandomPointInsideCollider(BoxCollider boxCollider)
@@ -41,19 +46,9 @@ public class Bullet : MonoBehaviour
         return boxCollider.transform.TransformPoint(point);
     }
 
-    Vector3 CalcBallisticVelocityVector(Vector3 source, Vector3 target, float angle)
+    private void Update()
     {
-        Vector3 direction = target - source;
-        float h = direction.y;
-        direction.y = 0;
-        float distance = direction.magnitude;
-        float a = angle * Mathf.Deg2Rad;
-        direction.y = distance * Mathf.Tan(a);
-        distance += h / Mathf.Tan(a);
-
-        // calculate velocity
-        float velocity = Mathf.Sqrt(distance * Physics.gravity.magnitude / Mathf.Sin(2 * a));
-        return velocity * direction.normalized;
+        //MoveToPos();
     }
 
     //Mermi gemiye isabet ederse

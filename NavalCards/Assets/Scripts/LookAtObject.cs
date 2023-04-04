@@ -9,8 +9,6 @@ public class LookAtObject : MonoBehaviour
     private Coroutine LookCoroutine;
     //Silahýn dönmeyi tamamalayýp tamamlamadýðý
     public bool isLooking = false;
-    //Update fonksiyonun 1 kere çalýþmasý için
-    private bool oneTime = false;
    
     public void StartRotating()
     {
@@ -37,6 +35,7 @@ public class LookAtObject : MonoBehaviour
             if (transform.rotation == lookRotation)
             {
                 isLooking = true;
+                thisShip.Turn = false;
                 break;
             }
         }
@@ -47,14 +46,4 @@ public class LookAtObject : MonoBehaviour
         thisShip = GetComponentInParent<Ship>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //Silahlar hedefe döndürülüyor. Oyun baþlamýþsa ve henüz hedefe bakmýyorsa.
-        if (!oneTime && !isLooking)
-        {
-            //StartRotating();
-            //oneTime = true;
-        }
-    }
 }

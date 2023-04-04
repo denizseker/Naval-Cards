@@ -19,8 +19,10 @@ public class Ship : MonoBehaviour
 
     public GameObject TargetShip;
     private DragObject selecter;
-    private LookAtObject lookScript;
+    public bool Turn;
     public bool isSelected;
+
+    private LookAtObject[] lookscripts;
 
     private void Awake()
     {
@@ -97,7 +99,6 @@ public class Ship : MonoBehaviour
             }
             if (selecter.upgradeIndex == 2)
             {
-                Debug.Log("Duplicate");
                 DuplicateUpgrade();
             }
         }
@@ -119,14 +120,12 @@ public class Ship : MonoBehaviour
 
     public void GetCell (GameObject _ship)
     {
-        Debug.Log("Getcell içi1");
         for (int i = 0; i < gameManager.cells.Count; i++)
         {
             if (gameManager.cells[i].GetComponent<Cell>().isEmpty)
             {
                 gameManager.cells[i].GetComponent<Cell>().GetShip(_ship);
                 currentCell = gameManager.cells[i];
-                Debug.Log("Getcell içi");
                 return;
             }
         }
@@ -153,7 +152,7 @@ public class Ship : MonoBehaviour
         
         selecter = GameObject.FindWithTag("Selecter").GetComponent<DragObject>();
         healthText.text = health.ToString();
-        lookScript = GetComponentInChildren<LookAtObject>();
+        
     }
 
     void Update()
@@ -162,7 +161,10 @@ public class Ship : MonoBehaviour
         if(TargetShip == null && gameManager.isGameStarted)
         {
             SetTarget();
-            lookScript.StartRotating();
+            //Gemi içerisindeki açýk silahlar bulunup rotate edilmeye baþlanýyor.
+            lookscripts = GetComponentsInChildren<LookAtObject>();
+            foreach (LookAtObject scr in lookscripts)
+                scr.StartRotating();
         }
 
 
@@ -180,9 +182,18 @@ public class Ship : MonoBehaviour
     {
         if (_other.tag == "EnemyBullet" && gameObject.tag == "AllyShip" || _other.tag == "AllyBullet" && gameObject.tag == "EnemyShip")
         {
-            //Geminin canýný azaltýyoruz.
-            ReduceHealth(_other.GetComponent<Bullet>().damage);
-
+            //2 Ayrý damage tutan script olduðu için yeni silahlar/mermiler eklenince deðiþtirmek gerekiyor.
+            Bullet bullet = _other.GetComponent<Bullet>();
+            Rocket rocket = _other.GetComponent<Rocket>();
+            if (bullet != null)
+            {
+                //Geminin canýný azaltýyoruz.
+                ReduceHealth(_other.GetComponent<Bullet>().damage);
+            }
+            if(rocket != null)
+            {
+                ReduceHealth(_other.GetComponent<Rocket>().damage);
+            }
             //Geminin caný 0 veya küçük ise *Patlama Durumu
             if (health <= 0)
             {
