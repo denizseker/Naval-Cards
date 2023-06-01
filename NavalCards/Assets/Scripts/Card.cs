@@ -30,6 +30,7 @@ public class Card : MonoBehaviour , IPointerDownHandler
     {
         selecterScr.upgradeIndex = ((int)upgrades);
         selecterScr.canMove = true;
+        gameObject.SetActive(false);
     }
 
 }
